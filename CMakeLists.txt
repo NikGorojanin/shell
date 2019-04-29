@@ -3,4 +3,4 @@ project(shenn)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(shenn main.cpp)
+add_executable(shenn main.cpp shell.cpp shell.h utils.h)
