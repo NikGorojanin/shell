@@ -55,5 +55,5 @@ void execute_background(string& command_line, function<void(CmdExecResult&)> f);
 Нельзя использовать команды типа pipe(|) с другими операторами(||, &&, ;)
 Нельзя выполнять команды требующие участия пользователя (nano, emacs и т.д.)
 
-##Автор
+## Автор
 Горожанин Никита
