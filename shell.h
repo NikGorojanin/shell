@@ -7,6 +7,7 @@
 #include <string>
 #include <iostream>
 #include <unistd.h>
+#include <signal.h>
 
 #ifndef SHENN_SHELL_H
 #define SHENN_SHELL_H
@@ -34,21 +35,26 @@ class Shell {
     vector<string> delimeters = {"||", "|", "&&", ";", "1&>", "2&>", ">>", ">", "(", ")", "&"};
 
     Duration m_child_time_total;
-    vector<string> parse_command_line(string& command_line);
-    void parse_command_line_for_pipe(string &command_line, vector<string>& commands);
+    vector<string> parse_command_line(const string& command_line);
+    void parse_command_line_for_pipe(const string &command_line, vector<string>& commands);
     void redirect(int oldfd, int newfd);
-    bool is_delimeter(string& str);
-    bool check_command(string& cmd, bool& piped);
+    bool is_delimeter(const string& str);
+    bool validate_pipe_command(const string& cmd);
+
     Duration timeChild() const;
 
-    bool execute_cmd(char** parsed, string output_type="", string path="");
-    void exec_cmd(string &input_args);
-    bool run_piped_cmd(vector<std::string>& commands);
+    CmdExecResult execute_cmd(char** parsed, const string& output_type="", const string& path="");
+    CmdExecResult run_piped_cmd(vector<std::string>& commands);
 public:
-    Shell(){};
+    Shell() : m_child_time_total(0){};
 
-    void execute_commands(string& command_line);
+    void execute(const string& command_line);
+    void execute(const string& command_line, CmdExecResult& result);
 
+    void execute_background(string& command_line, function<void(CmdExecResult&)> f);
+
+    void execute_piped_command(string& command_line);
+    void execute_piped_command(string& command_line, CmdExecResult& result);
 };
 
 

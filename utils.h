@@ -1,6 +1,7 @@
 //
 // Created by Nikita Gorojanin on 2019-04-28.
 //
+#include <stdio.h>
 #include <string.h>
 #include <string>
 #include <vector>
@@ -10,9 +11,11 @@
 #include <sstream>
 #include <fstream>
 #include "shell.h"
+#include <boost/algorithm/algorithm.hpp>
 
 #ifndef SHENN_UTILS_H
 #define SHENN_UTILS_H
+
 
 namespace Utils {
     int find_nearest_delim(string &str, vector<string> &delimeters, string &delim) {
@@ -82,9 +85,9 @@ namespace Utils {
         return f.good();
     }
 
-    bool write_to_file(string& filepath, string& data){
+    bool write_to_file(const string& filepath, const string& data){
         if (file_exists(filepath)){
-            ofstream ofs (filepath, ofstream::out | ofstream::app);
+            std::ofstream ofs (filepath, std::ofstream::out | std::ofstream::app);
             ofs << data;
             ofs.close();
 
@@ -92,6 +95,10 @@ namespace Utils {
         }
 
         return false;
+    }
+
+    void sigChld(int arg) {
+        wait(NULL);
     }
 }
 
