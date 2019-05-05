@@ -48,10 +48,10 @@ RM = /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/nikitagorojanin/OldCLionProjects/shenn
+CMAKE_SOURCE_DIR = /Users/nikitagorojanin/CLionProjects/shell/shell
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/nikitagorojanin/OldCLionProjects/shenn/cmake-build-debug
+CMAKE_BINARY_DIR = /Users/nikitagorojanin/CLionProjects/shell/shell/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/nikitagorojanin/OldCLionProjects/shenn/cmake-build-debug/CMakeFiles /Users/nikitagorojanin/OldCLionProjects/shenn/cmake-build-debug/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/nikitagorojanin/CLionProjects/shell/shell/cmake-build-debug/CMakeFiles /Users/nikitagorojanin/CLionProjects/shell/shell/cmake-build-debug/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/nikitagorojanin/OldCLionProjects/shenn/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/nikitagorojanin/CLionProjects/shell/shell/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -111,17 +111,44 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named shenn
+# Target rules for targets named shell
 
 # Build rule for target.
-shenn: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 shenn
-.PHONY : shenn
+shell: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 shell
+.PHONY : shell
 
 # fast build rule for target.
-shenn/fast:
-	$(MAKE) -f CMakeFiles/shenn.dir/build.make CMakeFiles/shenn.dir/build
-.PHONY : shenn/fast
+shell/fast:
+	$(MAKE) -f CMakeFiles/shell.dir/build.make CMakeFiles/shell.dir/build
+.PHONY : shell/fast
+
+Conditional.o: Conditional.cpp.o
+
+.PHONY : Conditional.o
+
+# target to build an object file
+Conditional.cpp.o:
+	$(MAKE) -f CMakeFiles/shell.dir/build.make CMakeFiles/shell.dir/Conditional.cpp.o
+.PHONY : Conditional.cpp.o
+
+Conditional.i: Conditional.cpp.i
+
+.PHONY : Conditional.i
+
+# target to preprocess a source file
+Conditional.cpp.i:
+	$(MAKE) -f CMakeFiles/shell.dir/build.make CMakeFiles/shell.dir/Conditional.cpp.i
+.PHONY : Conditional.cpp.i
+
+Conditional.s: Conditional.cpp.s
+
+.PHONY : Conditional.s
+
+# target to generate assembly for a file
+Conditional.cpp.s:
+	$(MAKE) -f CMakeFiles/shell.dir/build.make CMakeFiles/shell.dir/Conditional.cpp.s
+.PHONY : Conditional.cpp.s
 
 main.o: main.cpp.o
 
@@ -129,7 +156,7 @@ main.o: main.cpp.o
 
 # target to build an object file
 main.cpp.o:
-	$(MAKE) -f CMakeFiles/shenn.dir/build.make CMakeFiles/shenn.dir/main.cpp.o
+	$(MAKE) -f CMakeFiles/shell.dir/build.make CMakeFiles/shell.dir/main.cpp.o
 .PHONY : main.cpp.o
 
 main.i: main.cpp.i
@@ -138,7 +165,7 @@ main.i: main.cpp.i
 
 # target to preprocess a source file
 main.cpp.i:
-	$(MAKE) -f CMakeFiles/shenn.dir/build.make CMakeFiles/shenn.dir/main.cpp.i
+	$(MAKE) -f CMakeFiles/shell.dir/build.make CMakeFiles/shell.dir/main.cpp.i
 .PHONY : main.cpp.i
 
 main.s: main.cpp.s
@@ -147,7 +174,7 @@ main.s: main.cpp.s
 
 # target to generate assembly for a file
 main.cpp.s:
-	$(MAKE) -f CMakeFiles/shenn.dir/build.make CMakeFiles/shenn.dir/main.cpp.s
+	$(MAKE) -f CMakeFiles/shell.dir/build.make CMakeFiles/shell.dir/main.cpp.s
 .PHONY : main.cpp.s
 
 shell.o: shell.cpp.o
@@ -156,7 +183,7 @@ shell.o: shell.cpp.o
 
 # target to build an object file
 shell.cpp.o:
-	$(MAKE) -f CMakeFiles/shenn.dir/build.make CMakeFiles/shenn.dir/shell.cpp.o
+	$(MAKE) -f CMakeFiles/shell.dir/build.make CMakeFiles/shell.dir/shell.cpp.o
 .PHONY : shell.cpp.o
 
 shell.i: shell.cpp.i
@@ -165,7 +192,7 @@ shell.i: shell.cpp.i
 
 # target to preprocess a source file
 shell.cpp.i:
-	$(MAKE) -f CMakeFiles/shenn.dir/build.make CMakeFiles/shenn.dir/shell.cpp.i
+	$(MAKE) -f CMakeFiles/shell.dir/build.make CMakeFiles/shell.dir/shell.cpp.i
 .PHONY : shell.cpp.i
 
 shell.s: shell.cpp.s
@@ -174,7 +201,7 @@ shell.s: shell.cpp.s
 
 # target to generate assembly for a file
 shell.cpp.s:
-	$(MAKE) -f CMakeFiles/shenn.dir/build.make CMakeFiles/shenn.dir/shell.cpp.s
+	$(MAKE) -f CMakeFiles/shell.dir/build.make CMakeFiles/shell.dir/shell.cpp.s
 .PHONY : shell.cpp.s
 
 # Help Target
@@ -185,7 +212,10 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
-	@echo "... shenn"
+	@echo "... shell"
+	@echo "... Conditional.o"
+	@echo "... Conditional.i"
+	@echo "... Conditional.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

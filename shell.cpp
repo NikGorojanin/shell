@@ -5,6 +5,8 @@
 #include <algorithm>
 #include "shell.h"
 #include "utils.h"
+#include "conditional.h"
+#include <boost/algorithm/string.hpp>
 
 
 //===== private ======
@@ -508,3 +510,36 @@ void Shell::execute_background(string& command_line, function<void(CmdExecResult
     }
 }
 
+void Shell::execute_conditional(string& command_line){
+
+    map <string, string> vars;
+    vector<string> passToShell;
+    vector<string> lines;
+
+    boost::split(lines, command_line, boost::is_any_of("\n"));
+
+    Conditional c = Conditional();
+    int cType = c.checkType(command_line);
+
+    switch (cType)
+    {
+        case 3:
+            c.findInit(lines, vars);
+            c.parseIf(lines, vars, passToShell);
+            break;
+        case 4:
+            c.findInit(lines, vars);
+            c.parseWhile(lines, vars, passToShell);
+            break;
+        case 5:
+            c.parseFor(lines, vars, passToShell);
+
+            for (string &command : passToShell ){
+                execute(command);
+            }
+
+            break;
+        default:
+            break;
+    }
+}

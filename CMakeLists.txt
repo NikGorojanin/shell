@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 11)
 
 set(SOURCE_FILES main.cpp)
 
-add_executable(shell main.cpp shell.cpp shell.h utils.h)
+add_executable(shell main.cpp shell.cpp shell.h utils.h Conditional.cpp Conditional.h conditional.cpp conditional.h)
 
 find_package(Boost COMPONENTS system filesystem REQUIRED)
 IF (Boost_FOUND)

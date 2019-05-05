@@ -82,6 +82,9 @@ int main()
         ofs.close();
     });
 
+    str_command = "for ((c = 1; c < 4; c++))\nthen\nls\ncat test.txt\ndone";
+    shell.execute_conditional(str_command);
+
     cout << "All tests passed!";
 
     return 0;
