@@ -1,14 +1,17 @@
 cmake_minimum_required(VERSION 3.12)
-project(shenn)
+project(shell)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 11)
 
-add_executable(shenn main.cpp shell.cpp shell.h utils.h)
+set(SOURCE_FILES main.cpp)
 
-set(boost_min_ver 1.50.0)
-set(boost_libs system filesystem)
-find_package(Boost ${boost_min_ver})
+add_executable(shell main.cpp shell.cpp shell.h utils.h)
 
-if(Boost_FOUND)
-    find_package(Boost ${boost_min_ver} COMPONENTS ${boost_libs})
+find_package(Boost COMPONENTS system filesystem REQUIRED)
+IF (Boost_FOUND)
+    include_directories(${Boost_INCLUDE_DIR})
+    target_link_libraries(shell
+            ${Boost_FILESYSTEM_LIBRARY}
+            ${Boost_SYSTEM_LIBRARY}
+            )
 endif()

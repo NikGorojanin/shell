@@ -197,8 +197,8 @@ CmdExecResult Shell::run_piped_cmd(vector<std::string>& pipe_chunks) {
             redirect(in, STDIN_FILENO);
             redirect(fd[1], STDOUT_FILENO);
 
-            char **argv = Utils::to_cstring(pipe_chunks[i]);
-            if (execvp(argv[0], argv)<0) {
+            unique_ptr<char*[]> argv = Utils::to_cstring(pipe_chunks[i]);
+            if (execvp(argv[0], argv.get())<0) {
                 cerr << "Unrecognized command";
             }
 
@@ -220,8 +220,9 @@ CmdExecResult Shell::run_piped_cmd(vector<std::string>& pipe_chunks) {
         redirect(ed[1], STDERR_FILENO);
         close(ed[0]);
 
-        char **argv = Utils::to_cstring(pipe_chunks.back());
-        if (execvp(argv[0], argv)<0){
+        unique_ptr<char*[]> argv = Utils::to_cstring(pipe_chunks.back());
+
+        if (execvp(argv[0], argv.get())<0){
             cerr << "Unrecognized command";
         }
 
@@ -268,14 +269,14 @@ void Shell::execute(const string &command_line) {
         return;
     }
 
-    bool skip_command = false;
     CmdExecResult result;
+
+    bool skip_command = false;
     bool output_branch_in_file = false;
     string output_type, output_path;
 
     for (int i = 0; i < commands.size(); i++) {
         if (commands[i] != "(") {
-
             if (skip_command) {
                 if (is_delimeter(commands[i]) &&
                     ((result.success && commands[i] != "||") || (!result.success && commands[i] != "&&"))) {
@@ -295,10 +296,10 @@ void Shell::execute(const string &command_line) {
                 continue;
             }
 
-            char **argv = Utils::to_cstring(commands[i]);
+            unique_ptr<char*[]> argv = Utils::to_cstring(commands[i]);
 
             if (output_branch_in_file) {
-                result = execute_cmd(argv, output_type, output_path);
+                result = execute_cmd(argv.get(), output_type, output_path);
 
                 if (result.success)
                     cout << result.success_result;
@@ -308,10 +309,10 @@ void Shell::execute(const string &command_line) {
                 if (i < commands.size() - 2 &&
                     (commands[i + 1] == "1&>" || commands[i + 1] == "2&>" || commands[i + 1] == ">"
                      || commands[i + 1] == ">>")) {
-                    result = execute_cmd(argv, move(commands[i + 1]), move(commands[i + 2]));
+                    result = execute_cmd(argv.get(), move(commands[i + 1]), move(commands[i + 2]));
                     i += 2;
                 } else {
-                    result = execute_cmd(argv);
+                    result = execute_cmd(argv.get());
 
                     if (result.success)
                         cout << result.success_result;
@@ -374,14 +375,14 @@ void Shell::execute(const string& command_line, CmdExecResult &result){
         return;
     }
 
-    bool skip_command = false;
     CmdExecResult res = CmdExecResult();
+
+    bool skip_command = false;
     bool output_branch_in_file = false;
     string output_type, output_path;
 
     for (int i = 0; i < commands.size(); i++) {
         if (commands[i] != "(") {
-
             if (skip_command) {
                 if (is_delimeter(commands[i]) &&
                     ((res.success && commands[i] != "||") || (!res.success && commands[i] != "&&"))) {
@@ -398,21 +399,22 @@ void Shell::execute(const string& command_line, CmdExecResult &result){
             if (is_delimeter(commands[i])) {
                 if (commands[i] == ")" && output_branch_in_file)
                     output_branch_in_file = false;
+
                 continue;
             }
 
-            char **argv = Utils::to_cstring(commands[i]);
+            unique_ptr<char*[]> argv = Utils::to_cstring(commands[i]);
 
             if (output_branch_in_file) {
-                res = execute_cmd(argv, output_type, output_path);
+                res = execute_cmd(argv.get(), output_type, output_path);
             } else {
                 if (i < commands.size() - 2 &&
                     (commands[i + 1] == "1&>" || commands[i + 1] == "2&>" || commands[i + 1] == ">"
                      || commands[i + 1] == ">>")) {
-                    res = execute_cmd(argv, move(commands[i + 1]), move(commands[i + 2]));
+                    res = execute_cmd(argv.get(), move(commands[i + 1]), move(commands[i + 2]));
                     i += 2;
                 } else {
-                    res = execute_cmd(argv);
+                    res = execute_cmd(argv.get());
                 }
             }
 

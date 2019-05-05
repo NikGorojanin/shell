@@ -17,6 +17,8 @@
 #include <fstream>
 #include <assert.h>
 #include "shell.h"
+#include <boost/algorithm/algorithm.hpp>
+#include <boost/filesystem.hpp>
 
 using namespace std;
 
@@ -37,40 +39,50 @@ int main()
     str_command = "ls && cat test.txt";
     shell.execute(str_command, result);
     assert(result.success_result=="hello!");
+    cout << "Test: \"ls && cat test.txt\" | Status: passed" << endl;
 
     str_command = "cat test.txt || ls";
     shell.execute(str_command, result);
     assert(result.success_result=="hello!");
+    cout << "Test: \"cat test.txt || ls\" | Status: passed" << endl;
 
     str_command = "(ls asas && cd ../) || (ls && cat test.txt)";
     shell.execute(str_command, result);
     assert(result.success_result=="hello!");
-
-    str_command = "(ls asas && cd ../) || cat test.txt > test2.txt";
-    shell.execute(str_command, result);
-
-    std::ifstream ifs ("test2.txt", std::ofstream::in);
-    string data;
-    ifs >> data;
-    ifs.close();
-
-    assert(data=="hello!");
+    cout << "Test: \"(ls asas && cd ../) || (ls && cat test.txt)\" | Status: passed" << endl;
 
     str_command = "ls | sort | head -n 5 | head -n 4 | head -n 3 | sort -r | tail -n 1";
     shell.execute_piped_command(str_command, result);
     assert(result.success_result=="CMakeCache.txt\n");
+    cout << "Test: \"ls | sort | head -n 5 | head -n 4 | head -n 3 | sort -r | tail -n 1\" | Status: passed" << endl;
 
-    str_command = "cp copy.txt ../";
+    str_command = "(ls asas && cd ../) || cat test.txt > test2.txt";
+    shell.execute(str_command, result);
+    std::ifstream ifs ("test2.txt", std::ofstream::in);
+    string data;
+    ifs >> data;
+    ifs.close();
+    assert(data=="hello!");
+    cout << "Test: \"(ls asas && cd ../) || cat test.txt > test2.txt\" | Status: passed" << endl;
+
+    str_command = "/Users/nikitagorojanin/CLionProjects/shell/shell/cmake-build-debug/mygrep grep -c \"word\" grep_test.txt";
+    shell.execute(str_command, result);
+    assert(result.success_result=="1\n");
+    cout << "Test: \"grep -c ...\" | Status: passed" << endl;
+
+    str_command = "/Users/nikitagorojanin/CLionProjects/shell/shell/cmake-build-debug/mygrep grep -o \"word\" grep_test.txt";
+    shell.execute(str_command, result);
+    assert(result.success_result=="word\n");
+    cout << "Test: \"grep -0 ...\" | Status: passed" << endl;
+
+    str_command = "cp ar.zip ../";
     shell.execute_background(str_command, [](CmdExecResult& res){
         std::ofstream ofs ("test3.txt", std::ofstream::out | std::ofstream::app);
-        ofs << "here";
+        ofs << "here: " << boost::filesystem::exists("../ar.zip");
         ofs.close();
     });
 
-    shell.execute("ls");
-    for (int i=0;i<1000000000;i++){}
-
-    cout << "Tests passed!";
+    cout << "All tests passed!";
 
     return 0;
 }

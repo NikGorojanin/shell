@@ -12,6 +12,7 @@
 #include <fstream>
 #include "shell.h"
 #include <boost/algorithm/algorithm.hpp>
+#include <boost/filesystem.hpp>
 
 #ifndef SHENN_UTILS_H
 #define SHENN_UTILS_H
@@ -63,10 +64,10 @@ namespace Utils {
         return internal;
     }
 
-    char** to_cstring(string& cmd){
+    unique_ptr<char*[]> to_cstring(string& cmd){
         vector<string> input_args = split(cmd, ' ');
 
-        char** argv = new char*[input_args.size() + 1];
+        unique_ptr<char*[]> argv(new char*[input_args.size() + 1]);
 
         for (unsigned int i = 0; i < input_args.size(); ++i) {
             // Последним аргументом должен быть Null, поэтому + 1
@@ -80,9 +81,7 @@ namespace Utils {
     }
 
     bool file_exists(const string& filename) {
-        ifstream f(filename.c_str());
-
-        return f.good();
+        return boost::filesystem::exists(filename);
     }
 
     bool write_to_file(const string& filepath, const string& data){

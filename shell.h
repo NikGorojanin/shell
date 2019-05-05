@@ -94,6 +94,9 @@ public:
         \param[out] result Ссылка на экземпляр структуры CmdExecResult, хранящий результат выполнения команды
     */
     void execute_piped_command(string& command_line, CmdExecResult& result);
+
+    void execute_conditional(string& command_line, CmdExecResult& result);
+    void execute_conditional(string& command_line);
 };
 
 #endif //SHENN_SHELL_H

@@ -49,7 +49,8 @@ void execute_background(string& command_line, function<void(CmdExecResult&)> f);
 Здесь f - коллбек-функция, принимающая ссылку на экземпляр класса CmdExecResult.
 
 ## Запуск тестов
-Создать в папке cmake-build-debug файлы copy.txt, test.txt, test2.txt, test3.txt
+Создать в папке cmake-build-debug файлы ar.zip большого размера, test.txt, test2.txt, test3.txt
+Ввести в слово "hello!" в файл test.txt без ковычек
 
 ### Ограничания
 Нельзя использовать команды типа pipe(|) с другими операторами(||, &&, ;)
