@@ -95,7 +95,17 @@ public:
     */
     void execute_piped_command(string& command_line, CmdExecResult& result);
 
+    /*!
+        Выполняет надор команд внутри опеаторов while, for, if
+        \param[in] command_line Команда пользователя
+        \param[out] result ссылка на вектор резльтатов от каждой, выполненной команды
+    */
     void execute_conditional(string& command_line, vector<CmdExecResult>& result);
+
+    /*!
+        Выполняет надор команд внутри опеаторов while, for, if
+        \param[in] command_line Команда пользователя
+    */
     void execute_conditional(string& command_line);
 };
 
