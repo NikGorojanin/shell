@@ -4,6 +4,7 @@
 #include <string.h>
 #include <string>
 #include <vector>
+#include <array>
 #include <string>
 #include <iostream>
 #include <unistd.h>
@@ -44,7 +45,11 @@ struct CmdExecResult {
  *  работы с результатами их выполнения
  */
 class Shell {
-    vector<string> delimeters = {"||", "|", "&&", ";", "1&>", "2&>", ">>", ">", "(", ")", "&"};
+
+public:
+    using DelimetersArray = array<string, 11>;
+private:
+    const DelimetersArray delimeters = {"||", "|", "&&", ";", "1&>", "2&>", ">>", ">", "(", ")", "&"};
 
     Duration m_child_time_total;
     vector<string> parse_command_line(const string& command_line);

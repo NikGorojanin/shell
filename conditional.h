@@ -12,12 +12,25 @@
 #ifndef SHELL_CONDITIONAL_H
 #define SHELL_CONDITIONAL_H
 
-#define STRING_T 0;
-#define NUMERIC_T 1;
-#define BOOLEAN_T 2;
-#define IF_ELSE 3;
-#define WHILE 4;
-#define FOR 5;
+//#define STRING_T 0;
+//#define NUMERIC_T 1;
+//#define BOOLEAN_T 2;
+
+enum class Tokens{
+    STRING_T,
+    NUMERIC_T,
+    BOOLEAN_T,
+    INVALID = -1
+};
+enum class Conditions {
+    IF_ELSE,
+    WHILE,
+    FOR,
+    INVALID = -1
+};
+//#define IF_ELSE 3;
+//#define WHILE 4;
+//#define FOR 5;
 
 using namespace std;
 
@@ -42,7 +55,7 @@ class Conditional {
     static int SemicolonPosition(string str);
 
 public:
-    int checkType(const string& str) const;
+    Conditions checkType(const string& str) const;
 
     static void findInit(vector<string> str, map<string, string> &vars);
 

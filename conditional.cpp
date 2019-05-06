@@ -9,19 +9,19 @@
 
 using namespace std;
 
-int Conditional::checkType(const string &str) const {
+Conditions Conditional::checkType(const string &str) const {
 
     if (str.find("if") != string::npos){
-        return IF_ELSE;
+        return Conditions::IF_ELSE;
     }
     else if (str.find("while") != string::npos){
-        return WHILE;
+        return Conditions::WHILE;
     }
     else if (str.find("for") != string::npos){
-        return FOR;
+        return Conditions::FOR;
     }
     else{
-        return -1;
+        return Conditions::INVALID;
     }
 }
 
@@ -144,7 +144,7 @@ bool Conditional::isNumeric(string leftExpr, string rightExpr, map <string, stri
         left = vars[var];
     }
 
-    if (rightExpr[0] != '$' && (rightExpr[0] == '-' && isDigit(rightExpr.substr(1, rightExpr.size() - 1))) || isDigit(rightExpr))
+    if ((rightExpr[0] != '$' && (rightExpr[0] == '-' && isDigit(rightExpr.substr(1, rightExpr.size() - 1)))) || isDigit(rightExpr))
     {
         right = rightExpr;
     }
@@ -200,7 +200,7 @@ bool Conditional::parseCondition(string str, map <string, string> vars)
     string var, left, right;
     float leftNumValue;
     float rightNumValue;
-    int type = -1;
+    Tokens type = Tokens::INVALID;
 
     for (int i = 0; i < 12; i++)
     {
@@ -219,15 +219,15 @@ bool Conditional::parseCondition(string str, map <string, string> vars)
 
     if (isNumeric(leftExpr, rightExpr, vars, leftNumValue, rightNumValue))
     {
-        type = NUMERIC_T;
+        type = Tokens::NUMERIC_T;
     }
     else if (isBoolean(leftExpr, rightExpr, vars, leftNumValue, rightNumValue))
     {
-        type = BOOLEAN_T;
+        type = Tokens::BOOLEAN_T;
     }
     else
     {
-        type = STRING_T;
+        type = Tokens::STRING_T;
 
         if (leftExpr[0] != '$')
         {
@@ -250,7 +250,7 @@ bool Conditional::parseCondition(string str, map <string, string> vars)
         }
     }
 
-    if (type == 1)
+    if (type == Tokens::NUMERIC_T)
     {
         if (sign == "<" || sign == "-gt")
             return leftNumValue < rightNumValue;
@@ -265,7 +265,7 @@ bool Conditional::parseCondition(string str, map <string, string> vars)
             return leftNumValue >= rightNumValue;
     }
 
-    if (type == 1 || type == 2)
+    if (type == Tokens::NUMERIC_T|| type == Tokens::BOOLEAN_T)
     {
         if (sign == "==" || sign == "-eq")
             return leftNumValue == rightNumValue;
@@ -274,7 +274,7 @@ bool Conditional::parseCondition(string str, map <string, string> vars)
             return leftNumValue != rightNumValue;
     }
 
-    if (type == 0)
+    if (type == Tokens::STRING_T)
     {
         if (sign == "==" || sign == "-eq")
             return left == right;

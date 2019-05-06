@@ -5,6 +5,7 @@
 #include <string.h>
 #include <string>
 #include <vector>
+#include <array>
 #include <string>
 #include <iostream>
 #include <algorithm>
@@ -19,11 +20,11 @@
 
 
 namespace Utils {
-    int find_nearest_delim(string &str, vector<string> &delimeters, string &delim) {
+    int find_nearest_delim(string &str, const Shell::DelimetersArray &delimeters, string &delim) {
         int pos = -1, cur_pos = 0;
         string nearest_delim;
 
-        for (string &del : delimeters) {
+        for (const string &del : delimeters) {
             if ((cur_pos = str.find(del, 0)) != string::npos) {
                 if (cur_pos < pos || pos == -1) {
                     pos = cur_pos;

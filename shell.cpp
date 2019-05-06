@@ -166,7 +166,7 @@ CmdExecResult Shell::execute_cmd(char** parsed, const string& output_type, const
 
 bool Shell::validate_pipe_command(const string& cmd) {
     if(cmd.find(" | ")!=string::npos){
-        for(string& del : delimeters){
+        for(const string& del : delimeters){
             if (cmd.find(del)!=string::npos && del!="|"){
                 return false;
             }
@@ -253,7 +253,7 @@ CmdExecResult Shell::run_piped_cmd(vector<std::string>& pipe_chunks) {
 }
 
 bool Shell::is_delimeter(const string &str){
-    for(string &del : delimeters){
+    for(const string &del : delimeters){
         if (del==str)
             return true;
     }
@@ -518,20 +518,20 @@ void Shell::execute_conditional(string& command_line) {
     boost::split(lines, command_line, boost::is_any_of("\n"));
 
     Conditional c = Conditional();
-    int cType = c.checkType(command_line);
+    Conditions cType = c.checkType(command_line);
 
     vector<CmdExecResult> results;
     switch (cType)
     {
-        case 3:
+        case Conditions::IF_ELSE:
             c.findInit(lines, vars);
             results = c.parseIf(lines, vars, passToShell, this);
             break;
-        case 4:
+        case Conditions::WHILE:
             c.findInit(lines, vars);
             results = c.parseWhile(lines, vars, passToShell, this);
             break;
-        case 5:
+        case Conditions::FOR:
             results = c.parseFor(lines, vars, passToShell, this);
 
             break;
@@ -557,20 +557,20 @@ void Shell::execute_conditional(string& command_line, vector<CmdExecResult>& res
     boost::split(lines, command_line, boost::is_any_of("\n"));
 
     Conditional c = Conditional();
-    int cType = c.checkType(command_line);
+    Conditions cType = c.checkType(command_line);
 
     vector<CmdExecResult> results;
     switch (cType)
     {
-        case 3:
+        case Conditions::IF_ELSE:
             c.findInit(lines, vars);
             results = c.parseIf(lines, vars, passToShell, this);
             break;
-        case 4:
+        case Conditions::WHILE:
             c.findInit(lines, vars);
             results = c.parseWhile(lines, vars, passToShell, this);
             break;
-        case 5:
+        case Conditions::FOR:
             results = c.parseFor(lines, vars, passToShell, this);
 
             break;
