@@ -1,0 +1,7 @@
+gre "test" D:\grep\grep\sub1\sub2\test.txt
+grep -p "test" D:\grep\grep\sub1\sub2\test.txt
+grep -n "test" test.txt
+grep "test" D:\grep\grep\sub1\sub2\test.txt ../test.txt
+grep -o "test" D:\grep\grep\sub1\sub2\test.txt
+grep -n "test" ../test.txt
+grep -c "test" D:\grep\grep\sub1\sub2\test.txt ../test.txt
