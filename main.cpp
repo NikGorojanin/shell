@@ -39,22 +39,22 @@ int main()
     str_command = "ls && cat test.txt";
     shell.execute(str_command, result);
     assert(result.success_result=="hello!");
-    cout << "Test: \"ls && cat test.txt\" | Status: passed" << endl;
+    cout << "Test: \"ls && cat test.txt\" | Status: passed" << endl << endl;;
 
     str_command = "cat test.txt || ls";
     shell.execute(str_command, result);
     assert(result.success_result=="hello!");
-    cout << "Test: \"cat test.txt || ls\" | Status: passed" << endl;
+    cout << "Test: \"cat test.txt || ls\" | Status: passed" << endl << endl;;
 
     str_command = "(ls asas && cd ../) || (ls && cat test.txt)";
     shell.execute(str_command, result);
     assert(result.success_result=="hello!");
-    cout << "Test: \"(ls asas && cd ../) || (ls && cat test.txt)\" | Status: passed" << endl;
+    cout << "Test: \"(ls asas && cd ../) || (ls && cat test.txt)\" | Status: passed" << endl << endl;;
 
     str_command = "ls | sort | head -n 5 | head -n 4 | head -n 3 | sort -r | tail -n 1";
     shell.execute_piped_command(str_command, result);
     assert(result.success_result=="CMakeCache.txt\n");
-    cout << "Test: \"ls | sort | head -n 5 | head -n 4 | head -n 3 | sort -r | tail -n 1\" | Status: passed" << endl;
+    cout << "Test: \"ls | sort | head -n 5 | head -n 4 | head -n 3 | sort -r | tail -n 1\" | Status: passed" << endl << endl;;
 
     str_command = "(ls asas && cd ../) || cat test.txt > test2.txt";
     shell.execute(str_command, result);
@@ -63,17 +63,36 @@ int main()
     ifs >> data;
     ifs.close();
     assert(data=="hello!");
-    cout << "Test: \"(ls asas && cd ../) || cat test.txt > test2.txt\" | Status: passed" << endl;
+    cout << "Test: \"(ls asas && cd ../) || cat test.txt > test2.txt\" | Status: passed" << endl << endl;
 
     str_command = "/Users/nikitagorojanin/CLionProjects/shell/shell/cmake-build-debug/mygrep grep -c \"word\" grep_test.txt";
     shell.execute(str_command, result);
     assert(result.success_result=="1\n");
-    cout << "Test: \"grep -c ...\" | Status: passed" << endl;
+    cout << "Test: \"grep -c ...\" | Status: passed" << endl << endl;
 
     str_command = "/Users/nikitagorojanin/CLionProjects/shell/shell/cmake-build-debug/mygrep grep -o \"word\" grep_test.txt";
     shell.execute(str_command, result);
     assert(result.success_result=="word\n");
-    cout << "Test: \"grep -0 ...\" | Status: passed" << endl;
+    cout << "Test: \"grep -0 ...\" | Status: passed" << endl << endl;
+
+    str_command = "c = 5 \n b = 10 \n while ($c < $b) \n then \n cat test.txt \n ((c++)) \n done";
+    vector<CmdExecResult> while_results;
+    shell.execute_conditional(str_command, while_results);
+    assert(while_results.size() == 5);
+    for(int i=0;i<5;i++)
+        assert(while_results[i].success_result == "hello!");
+
+    cout << "Test: " << str_command << " | Status: passed" << endl << endl;
+
+    str_command = "for ((c = 1; c < 4; c++)) \n then \n cat test.txt \n done";
+    vector<CmdExecResult> for_results;
+    shell.execute_conditional(str_command, for_results);
+    assert(for_results.size() == 3);
+
+    for(int i=0;i<3;i++)
+        assert(for_results[i].success_result == "hello!");
+
+    cout << "Test: " << str_command << " | Status: passed" << endl << endl;
 
     str_command = "cp ar.zip ../";
     shell.execute_background(str_command, [](CmdExecResult& res){
@@ -81,9 +100,6 @@ int main()
         ofs << "here: " << boost::filesystem::exists("../ar.zip");
         ofs.close();
     });
-
-    str_command = "for ((c = 1; c < 4; c++))\nthen\nls\ncat test.txt\ndone";
-    shell.execute_conditional(str_command);
 
     cout << "All tests passed!";
 

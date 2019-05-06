@@ -95,7 +95,7 @@ public:
     */
     void execute_piped_command(string& command_line, CmdExecResult& result);
 
-    void execute_conditional(string& command_line, CmdExecResult& result);
+    void execute_conditional(string& command_line, vector<CmdExecResult>& result);
     void execute_conditional(string& command_line);
 };
 

@@ -7,6 +7,7 @@
 #include <map>
 #include <iostream>
 #include <fstream>
+#include "shell.h"
 
 #ifndef SHELL_CONDITIONAL_H
 #define SHELL_CONDITIONAL_H
@@ -45,11 +46,11 @@ public:
 
     static void findInit(vector<string> str, map<string, string> &vars);
 
-    static void parseIf(vector<string> str, map <string, string> vars, vector<string> &passToShell);
+    static vector<CmdExecResult> parseIf(vector<string> str, map <string, string> vars, vector<string> &passToShell, Shell *shell);
 
-    static void parseWhile(vector<string> str, map <string, string> vars, vector<string> &passToShell);
+    static vector<CmdExecResult> parseWhile(vector<string> str, map <string, string> vars, vector<string> &passToShell, Shell* shell);
 
-    static void parseFor(vector<string> str, map <string, string> vars, vector<string> &passToShell);
+    static vector<CmdExecResult> parseFor(vector<string> str, map <string, string> vars, vector<string> &passToShell, Shell* shell);
 
     Conditional(){};
 };

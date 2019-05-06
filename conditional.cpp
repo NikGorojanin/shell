@@ -286,7 +286,7 @@ bool Conditional::parseCondition(string str, map <string, string> vars)
     return true;
 }
 
-void Conditional::parseIf(vector<string> str, map <string, string> vars, vector<string> &passToShell)
+vector<CmdExecResult> Conditional::parseIf(vector<string> str, map <string, string> vars, vector<string> &passToShell, Shell* shell)
 {
     string condition;
     vector<string> Conditional;
@@ -308,6 +308,7 @@ void Conditional::parseIf(vector<string> str, map <string, string> vars, vector<
 
     bool elseCase = true;
 
+    vector<CmdExecResult> results;
     for (int j = 0; j < Conditional.size(); j++){
 
         if (Conditional::parseCondition(Conditional[j], vars))
@@ -332,6 +333,10 @@ void Conditional::parseIf(vector<string> str, map <string, string> vars, vector<
                 if (fl == 2)
                 {
                     passToShell.push_back(trim(str[i]));
+
+                    CmdExecResult result;
+                    shell->execute(trim(str[i]), result);
+                    results.push_back(result);
                 }
             }
 
@@ -360,13 +365,18 @@ void Conditional::parseIf(vector<string> str, map <string, string> vars, vector<
             if (fl == 2)
             {
                 passToShell.push_back(trim(str[i]));
-                cout << str[i] << endl;
+
+                CmdExecResult result;
+                shell->execute(trim(str[i]), result);
+                results.push_back(result);
             }
         }
     }
+
+    return results;
 }
 
-void Conditional::parseWhile(vector<string> str, map <string, string> vars, vector<string> &passToShell){
+vector<CmdExecResult> Conditional::parseWhile(vector<string> str, map <string, string> vars, vector<string> &passToShell, Shell* shell){
 
     string condition;
     string changeC;
@@ -389,6 +399,7 @@ void Conditional::parseWhile(vector<string> str, map <string, string> vars, vect
         }
     }
 
+    vector<CmdExecResult> results;
     while (Conditional::parseCondition(condition, vars)){
 
         for (int i = 0; i < str.size(); i++)
@@ -409,9 +420,10 @@ void Conditional::parseWhile(vector<string> str, map <string, string> vars, vect
             if (fl == 2 && str[i].find("((") == string::npos)
             {
                 passToShell.push_back(trim(str[i]));
-                cout << str[i] << endl;
+                CmdExecResult result;
+                shell->execute(trim(str[i]), result);
+                results.push_back(result);
             }
-
         }
         fl = 0;
         //change variables
@@ -426,7 +438,7 @@ void Conditional::parseWhile(vector<string> str, map <string, string> vars, vect
         }
     }
 
-
+    return results;
 }
 
 int Conditional::SemicolonPosition(string str){
@@ -439,8 +451,7 @@ int Conditional::SemicolonPosition(string str){
     return i;
 }
 
-void Conditional::parseFor(vector<string> str, map <string, string> vars, vector<string> &passToShell){
-
+vector<CmdExecResult> Conditional::parseFor(vector<string> str, map <string, string> vars, vector<string> &passToShell, Shell* shell){
     string condition;
     string changeC;
     string line;
@@ -467,7 +478,8 @@ void Conditional::parseFor(vector<string> str, map <string, string> vars, vector
 
     }
 
-    while (Conditional::parseCondition(condition, vars)){
+    vector<CmdExecResult> results;
+    while (Conditional::parseCondition(condition, vars)) {
 
         for (int i = 0; i < str.size(); i++)
         {
@@ -487,8 +499,10 @@ void Conditional::parseFor(vector<string> str, map <string, string> vars, vector
             if (fl == 2)
             {
                 passToShell.push_back(trim(str[i]));
+                CmdExecResult result;
+                shell->execute(trim(str[i]), result);
+                results.push_back(result);
             }
-
         }
         fl = 0;
         //change variables
@@ -502,4 +516,6 @@ void Conditional::parseFor(vector<string> str, map <string, string> vars, vector
             vars[varName] = to_string(stoi(vars[varName]) - 1);
         }
     }
+
+    return results;
 }

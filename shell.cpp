@@ -510,8 +510,7 @@ void Shell::execute_background(string& command_line, function<void(CmdExecResult
     }
 }
 
-void Shell::execute_conditional(string& command_line){
-
+void Shell::execute_conditional(string& command_line) {
     map <string, string> vars;
     vector<string> passToShell;
     vector<string> lines;
@@ -521,25 +520,63 @@ void Shell::execute_conditional(string& command_line){
     Conditional c = Conditional();
     int cType = c.checkType(command_line);
 
+    vector<CmdExecResult> results;
     switch (cType)
     {
         case 3:
             c.findInit(lines, vars);
-            c.parseIf(lines, vars, passToShell);
+            results = c.parseIf(lines, vars, passToShell, this);
             break;
         case 4:
             c.findInit(lines, vars);
-            c.parseWhile(lines, vars, passToShell);
+            results = c.parseWhile(lines, vars, passToShell, this);
             break;
         case 5:
-            c.parseFor(lines, vars, passToShell);
-
-            for (string &command : passToShell ){
-                execute(command);
-            }
+            results = c.parseFor(lines, vars, passToShell, this);
 
             break;
         default:
             break;
     }
+
+    for(CmdExecResult& res : results){
+        if (res.success){
+            cout << res.success_result << endl;
+        }
+        else{
+            cout << res.error_result << endl;
+        }
+    }
+}
+
+void Shell::execute_conditional(string& command_line, vector<CmdExecResult>& result) {
+    map <string, string> vars;
+    vector<string> passToShell;
+    vector<string> lines;
+
+    boost::split(lines, command_line, boost::is_any_of("\n"));
+
+    Conditional c = Conditional();
+    int cType = c.checkType(command_line);
+
+    vector<CmdExecResult> results;
+    switch (cType)
+    {
+        case 3:
+            c.findInit(lines, vars);
+            results = c.parseIf(lines, vars, passToShell, this);
+            break;
+        case 4:
+            c.findInit(lines, vars);
+            results = c.parseWhile(lines, vars, passToShell, this);
+            break;
+        case 5:
+            results = c.parseFor(lines, vars, passToShell, this);
+
+            break;
+        default:
+            break;
+    }
+
+    result = results;
 }
